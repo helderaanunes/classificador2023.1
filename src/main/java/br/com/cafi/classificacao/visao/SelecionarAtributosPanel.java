@@ -4,6 +4,8 @@
  */
 package br.com.cafi.classificacao.visao;
 
+import javax.swing.JInternalFrame;
+
 /**
  *
  * @author Aluno
@@ -13,8 +15,9 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
     /**
      * Creates new form SelecionarAtributosPanel
      */
-    public SelecionarAtributosPanel() {
+    public SelecionarAtributosPanel(JInternalFrame jif) {
         initComponents();
+        this.jif=jif;
     }
 
     /**
@@ -84,6 +87,11 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
         jButton1.setText("Remover");
 
         jButton2.setText("Cancelar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Desfazer");
 
@@ -126,7 +134,11 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       jif.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
+    private JInternalFrame jif;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
