@@ -113,6 +113,16 @@ public class TelaInicial extends javax.swing.JFrame {
                 Instances data = loader.getDataSet();
                 System.out.println("carregou arquivo");
                 System.out.println(data.get(0).toString());
+                
+                JInternalFrame jif = new JInternalFrame("Selecionar Atributos");
+                jDesktopPane1.add(jif);
+                jif.setVisible(true);
+                jif.setBounds(0, 0, 500, 500);
+                jif.setClosable(true);
+                jif.setResizable(true);
+                
+                SelecionarAtributosPanel sap = new SelecionarAtributosPanel(jif,data);
+                jif.add(sap);
             } catch (IOException ex) {
                 Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -127,7 +137,6 @@ public class TelaInicial extends javax.swing.JFrame {
         jif.setBounds(0, 0, 400, 400);
         jif.setClosable(true);
         jif.setResizable(true);
-        jif.add(new SelecionarAtributosPanel(jif));
     }//GEN-LAST:event_selecionarAtributosMenuItemActionPerformed
 
     /**

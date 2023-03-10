@@ -4,7 +4,16 @@
  */
 package br.com.cafi.classificacao.visao;
 
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JInternalFrame;
+import javax.swing.table.DefaultTableModel;
+import weka.core.Attribute;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Remove;
 
 /**
  *
@@ -15,9 +24,27 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
     /**
      * Creates new form SelecionarAtributosPanel
      */
-    public SelecionarAtributosPanel(JInternalFrame jif) {
+    public SelecionarAtributosPanel(JInternalFrame jif, Instances instancias) {
         initComponents();
-        this.jif=jif;
+        this.jif = jif;
+        this.instancias = instancias;
+        carregarTabela();
+    }
+
+    private void carregarTabela() {
+        //pegando o modelo da minha JTable
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+        // pegar todos os atributos do arquivo CSV
+        Enumeration<Attribute> atributos = instancias.enumerateAttributes();
+
+        //repetição para adicionar uma linha para cada atributo na tabela
+        while (atributos.hasMoreElements()) {
+            Attribute atributoAux = atributos.nextElement();
+            System.out.println(atributoAux.name());
+            model.addRow(new Object[]{atributoAux.name(), Attribute.typeToString(atributoAux)});
+        }
+
     }
 
     /**
@@ -41,27 +68,7 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "Atributo", "Tipo"
@@ -85,6 +92,11 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Remover");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Cancelar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -135,9 +147,28 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       jif.dispose();
+        jif.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       
+        Remove removeFilter = new Remove();
+        removeFilter.setAttributeIndices((jTable1.getSelectedRow()+1)+"");
+        removeFilter.setInvertSelection(true);
+        try {
+            removeFilter.setInputFormat(instancias);
+            Instances newData = Filter.useFilter(instancias, removeFilter);
+        } catch (Exception ex) {
+            Logger.getLogger(SelecionarAtributosPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+         //pegando o modelo da minha JTable
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        //removendo a linha selecionada
+        model.removeRow(jTable1.getSelectedRow());
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+    private Instances instancias;
     private JInternalFrame jif;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
