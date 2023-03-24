@@ -4,6 +4,7 @@
  */
 package br.com.cafi.classificacao.visao;
 
+import br.com.cafi.classificacao.modelo.classificadores.TreinarNaiveBayes;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,6 +63,9 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        classeLabel = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Selecionar Atributos");
@@ -107,6 +111,22 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
 
         jButton3.setText("Desfazer");
 
+        jButton4.setText("Treinar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Selecionar Atributo Classe");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        classeLabel.setForeground(new java.awt.Color(51, 51, 255));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -114,7 +134,7 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(19, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(142, 142, 142)
@@ -122,13 +142,22 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(59, 59, 59)
-                .addComponent(jButton1)
+                .addGap(172, 172, 172)
+                .addComponent(classeLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton5)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton3)))
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton2)
-                .addGap(64, 64, 64))
+                .addGap(27, 27, 27))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,12 +166,17 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(classeLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -157,7 +191,7 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
         removeFilter.setInvertSelection(true);
         try {
             removeFilter.setInputFormat(instancias);
-            Instances newData = Filter.useFilter(instancias, removeFilter);
+            instancias = Filter.useFilter(instancias, removeFilter);
         } catch (Exception ex) {
             Logger.getLogger(SelecionarAtributosPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -168,12 +202,29 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
         model.removeRow(jTable1.getSelectedRow());
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        TreinarNaiveBayes treinarNaiveBayes = new TreinarNaiveBayes();
+        try {
+            treinarNaiveBayes.realizarTreinamento(instancias);
+        } catch (Exception ex) {
+            Logger.getLogger(SelecionarAtributosPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        instancias.setClassIndex(jTable1.getSelectedRow());
+        classeLabel.setText("O atributo classe é:" +instancias.classAttribute().name());
+    }//GEN-LAST:event_jButton5ActionPerformed
     private Instances instancias;
     private JInternalFrame jif;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel classeLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

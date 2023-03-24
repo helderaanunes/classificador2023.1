@@ -12,7 +12,7 @@ public class TreinarNaiveBayes {
 
     public void realizarTreinamento(Instances datasetInstances) throws Exception {
         // Create naivebayes classifier //
-         naivebayes = new NaiveBayes();
+        naivebayes = new NaiveBayes();
 
         // Randomize the dataset //
         datasetInstances.randomize(new java.util.Random(0));
@@ -27,10 +27,9 @@ public class TreinarNaiveBayes {
         Instances testInstances = new Instances(datasetInstances, trainingDataSize, testDataSize);
 
         // Set Target class //
-        trainingInstances.setClassIndex(trainingInstances.numAttributes() - 1);
-        testInstances.setClassIndex(testInstances.numAttributes() - 1);
+//        trainingInstances.setClassIndex(trainingInstances.numAttributes() - 1);
+//        testInstances.setClassIndex(testInstances.numAttributes() - 1);
 
-       
         // Build Classifier //
         naivebayes.buildClassifier(trainingInstances);
 
