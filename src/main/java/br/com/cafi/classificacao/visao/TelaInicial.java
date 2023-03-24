@@ -109,7 +109,7 @@ public class TelaInicial extends javax.swing.JFrame {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = jfc.getSelectedFile();
 
-               CSVLoader loader = new CSVLoader();
+            CSVLoader loader = new CSVLoader();
             try {
                 loader.setSource(selectedFile);
                 Instances data = loader.getDataSet();
@@ -128,6 +128,7 @@ public class TelaInicial extends javax.swing.JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         }
     }//GEN-LAST:event_abrirArquivoAprendizagemMenuItemActionPerformed
 
@@ -138,6 +139,7 @@ public class TelaInicial extends javax.swing.JFrame {
         jif.setBounds(0, 0, 400, 400);
         jif.setClosable(true);
         jif.setResizable(true);
+        jif.add(new SelecionarAtributosPanel(jif, instancias, this));
     }//GEN-LAST:event_selecionarAtributosMenuItemActionPerformed
 
     /**
