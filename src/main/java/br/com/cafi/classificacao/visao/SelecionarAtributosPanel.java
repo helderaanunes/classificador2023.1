@@ -4,11 +4,15 @@
  */
 package br.com.cafi.classificacao.visao;
 
+import br.com.cafi.classificacao.modelo.classificadores.TreinarIBK;
+import br.com.cafi.classificacao.modelo.classificadores.TreinarMLP;
 import br.com.cafi.classificacao.modelo.classificadores.TreinarNaiveBayes;
+import br.com.cafi.classificacao.modelo.classificadores.TreinarSMO;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import weka.core.Attribute;
 import weka.core.Instance;
@@ -25,11 +29,14 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
     /**
      * Creates new form SelecionarAtributosPanel
      */
-    public SelecionarAtributosPanel(JInternalFrame jif, Instances instancias) {
+    TelaInicial telaInicial;
+
+    public SelecionarAtributosPanel(JInternalFrame jif, Instances instancias, TelaInicial telaInicial) {
         initComponents();
         this.jif = jif;
         this.instancias = instancias;
         carregarTabela();
+        this.telaInicial = telaInicial;
     }
 
     private void carregarTabela() {
@@ -63,7 +70,7 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        treinarButton = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         classeLabel = new javax.swing.JLabel();
 
@@ -110,11 +117,17 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
         });
 
         jButton3.setText("Desfazer");
-
-        jButton4.setText("Treinar");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        treinarButton.setText("Treinar");
+        treinarButton.setEnabled(false);
+        treinarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                treinarButtonActionPerformed(evt);
             }
         });
 
@@ -150,7 +163,7 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton5)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton4)
+                        .addComponent(treinarButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -175,7 +188,7 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
                     .addComponent(jButton1)
                     .addComponent(jButton2)
                     .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(treinarButton))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -185,37 +198,41 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
-        Remove removeFilter = new Remove();
-        removeFilter.setAttributeIndices((jTable1.getSelectedRow()+1)+"");
-        removeFilter.setInvertSelection(true);
-        try {
-            removeFilter.setInputFormat(instancias);
-            instancias = Filter.useFilter(instancias, removeFilter);
-        } catch (Exception ex) {
-            Logger.getLogger(SelecionarAtributosPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        if (JOptionPane.showConfirmDialog(null, "Realmente desejar remover?") == JOptionPane.YES_OPTION) {
+            Remove removeFilter = new Remove();
+            removeFilter.setAttributeIndices((jTable1.getSelectedRow() + 1) + "");
+            removeFilter.setInvertSelection(true);
+            try {
+                removeFilter.setInputFormat(instancias);
+                instancias = Filter.useFilter(instancias, removeFilter);
+            } catch (Exception ex) {
+                Logger.getLogger(SelecionarAtributosPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-         //pegando o modelo da minha JTable
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        //removendo a linha selecionada
-        model.removeRow(jTable1.getSelectedRow());
-        
+            //pegando o modelo da minha JTable
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            //removendo a linha selecionada
+            model.removeRow(jTable1.getSelectedRow());
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        TreinarNaiveBayes treinarNaiveBayes = new TreinarNaiveBayes();
-        try {
-            treinarNaiveBayes.realizarTreinamento(instancias);
-        } catch (Exception ex) {
-            Logger.getLogger(SelecionarAtributosPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void treinarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_treinarButtonActionPerformed
+        new TreinarIBK(instancias, telaInicial).start();
+        new TreinarMLP(instancias, telaInicial).start();
+        new TreinarNaiveBayes(instancias, telaInicial).start();
+        new TreinarSMO(instancias, telaInicial).start();
+
+    }//GEN-LAST:event_treinarButtonActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         instancias.setClassIndex(jTable1.getSelectedRow());
-        classeLabel.setText("O atributo classe é:" +instancias.classAttribute().name());
+        classeLabel.setText("O atributo classe é:" + instancias.classAttribute().name());
+        treinarButton.setEnabled(true);
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
     private Instances instancias;
     private JInternalFrame jif;
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -223,10 +240,10 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton treinarButton;
     // End of variables declaration//GEN-END:variables
 }

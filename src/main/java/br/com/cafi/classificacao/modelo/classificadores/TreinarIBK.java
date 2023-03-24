@@ -5,15 +5,15 @@ import br.com.cafi.classificacao.visao.TelaInicial;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import weka.classifiers.Evaluation;
-import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.lazy.IBk;
 import weka.core.Instances;
 
-public class TreinarNaiveBayes extends  Thread{
-TelaInicial telaInicial;
-    NaiveBayes naivebayes;
+public class TreinarIBK extends  Thread{
+    TelaInicial telaInicial;
+    IBk algoritmo;
     Instances data;
     
-    public TreinarNaiveBayes (Instances data,TelaInicial ti){
+    public TreinarIBK (Instances data,TelaInicial ti){
         this.data=data;
         this.telaInicial=ti;
     }
@@ -22,14 +22,14 @@ TelaInicial telaInicial;
         try {
             realizarTreinamento(data);
         } catch (Exception ex) {
-            Logger.getLogger(TreinarNaiveBayes.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TreinarIBK.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public void realizarTreinamento(Instances datasetInstances) throws Exception {
         // Create naivebayes classifier //
         long tempo = System.currentTimeMillis();
-        naivebayes = new NaiveBayes();
+        algoritmo = new IBk();
 
         // Randomize the dataset //
         datasetInstances.randomize(new java.util.Random(0));
@@ -48,13 +48,13 @@ TelaInicial telaInicial;
 //        testInstances.setClassIndex(testInstances.numAttributes() - 1);
 
         // Build Classifier //
-        naivebayes.buildClassifier(trainingInstances);
+        algoritmo.buildClassifier(trainingInstances);
 
         // Evaluation //
         Evaluation evaluation = new Evaluation(trainingInstances);
-        evaluation.evaluateModel(naivebayes, testInstances);
-        System.out.println("Naive bayes ("+(System.currentTimeMillis()-tempo)+") \n\n"+evaluation.toSummaryString("\nResults", false));
-        Resultado r = new Resultado("Naive Bayes", evaluation.correct());
+        evaluation.evaluateModel(algoritmo, testInstances);
+        System.out.println("IBK ("+(System.currentTimeMillis()-tempo)+") \n\n"+evaluation.toSummaryString("\nResults", false));
+        Resultado r = new Resultado("IBK", evaluation.correct());
         telaInicial.adicionarResultado(r);
     }
 }

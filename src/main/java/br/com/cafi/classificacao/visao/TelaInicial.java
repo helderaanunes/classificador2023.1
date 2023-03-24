@@ -4,8 +4,10 @@
  */
 package br.com.cafi.classificacao.visao;
 
+import br.com.cafi.classificacao.modelo.entidade.Resultado;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -121,13 +123,12 @@ public class TelaInicial extends javax.swing.JFrame {
                 jif.setClosable(true);
                 jif.setResizable(true);
                 
-                SelecionarAtributosPanel sap = new SelecionarAtributosPanel(jif,data);
+                SelecionarAtributosPanel sap = new SelecionarAtributosPanel(jif,data,this);
                 jif.add(sap);
             } catch (IOException ex) {
                 Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
     }//GEN-LAST:event_abrirArquivoAprendizagemMenuItemActionPerformed
 
     private void selecionarAtributosMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selecionarAtributosMenuItemActionPerformed
@@ -174,6 +175,20 @@ public class TelaInicial extends javax.swing.JFrame {
         });
     }
 
+    public synchronized void adicionarResultado(Resultado r ){
+        lista.add(r);
+        if(lista.size()>3){
+            Resultado melhorResultado=lista.get(0);
+            for (int i=1;i<lista.size();i++){
+                if (lista.get(i).getCorreto()>melhorResultado.getCorreto())
+                    melhorResultado=lista.get(i);
+                
+            }
+            System.out.println("Melhor resultado foi: "+melhorResultado);
+        }
+    }
+    
+    ArrayList<Resultado> lista = new ArrayList<>();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem abrirArquivoAprendizagemMenuItem;
     private javax.swing.JMenu arquivoMenu;

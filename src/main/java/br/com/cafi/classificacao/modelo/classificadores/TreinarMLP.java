@@ -5,15 +5,15 @@ import br.com.cafi.classificacao.visao.TelaInicial;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import weka.classifiers.Evaluation;
-import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instances;
 
-public class TreinarNaiveBayes extends  Thread{
+public class TreinarMLP extends  Thread{
 TelaInicial telaInicial;
-    NaiveBayes naivebayes;
+    MultilayerPerceptron algoritmo;
     Instances data;
     
-    public TreinarNaiveBayes (Instances data,TelaInicial ti){
+    public TreinarMLP (Instances data,TelaInicial ti){
         this.data=data;
         this.telaInicial=ti;
     }
@@ -22,14 +22,14 @@ TelaInicial telaInicial;
         try {
             realizarTreinamento(data);
         } catch (Exception ex) {
-            Logger.getLogger(TreinarNaiveBayes.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TreinarMLP.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public void realizarTreinamento(Instances datasetInstances) throws Exception {
-        // Create naivebayes classifier //
+        // Create algoritmo classifier //
         long tempo = System.currentTimeMillis();
-        naivebayes = new NaiveBayes();
+        algoritmo = new MultilayerPerceptron();
 
         // Randomize the dataset //
         datasetInstances.randomize(new java.util.Random(0));
@@ -48,13 +48,13 @@ TelaInicial telaInicial;
 //        testInstances.setClassIndex(testInstances.numAttributes() - 1);
 
         // Build Classifier //
-        naivebayes.buildClassifier(trainingInstances);
+        algoritmo.buildClassifier(trainingInstances);
 
         // Evaluation //
         Evaluation evaluation = new Evaluation(trainingInstances);
-        evaluation.evaluateModel(naivebayes, testInstances);
-        System.out.println("Naive bayes ("+(System.currentTimeMillis()-tempo)+") \n\n"+evaluation.toSummaryString("\nResults", false));
-        Resultado r = new Resultado("Naive Bayes", evaluation.correct());
+        evaluation.evaluateModel(algoritmo, testInstances);
+        System.out.println("Resultado MLP ("+(System.currentTimeMillis()-tempo)+") \n\n"+evaluation.toSummaryString("\nResults", false));
+        Resultado r = new Resultado("MLP", evaluation.correct());
         telaInicial.adicionarResultado(r);
     }
 }
