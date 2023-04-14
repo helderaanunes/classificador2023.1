@@ -139,7 +139,7 @@ public class TelaInicial extends javax.swing.JFrame {
         jif.setBounds(0, 0, 400, 400);
         jif.setClosable(true);
         jif.setResizable(true);
-        jif.add(new SelecionarAtributosPanel(jif, instancias, this));
+      //  jif.add(new SelecionarAtributosPanel(jif, instancias, this));
     }//GEN-LAST:event_selecionarAtributosMenuItemActionPerformed
 
     /**

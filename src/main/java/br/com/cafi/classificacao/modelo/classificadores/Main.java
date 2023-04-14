@@ -1,5 +1,6 @@
 package br.com.cafi.classificacao.modelo.classificadores;
 
+import br.com.cafi.classificacao.visao.TelaInicial;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,7 +15,7 @@ public class Main {
     public void treinar() throws Exception {
         try {
             carregarArquivoArff("C:\\Program Files\\Weka-3-8-6\\data\\diabetes.arff");
-            TreinarNaiveBayes treinar = new TreinarNaiveBayes();
+            TreinarNaiveBayes treinar = new TreinarNaiveBayes(data,new TelaInicial());
             treinar.realizarTreinamento(data);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
