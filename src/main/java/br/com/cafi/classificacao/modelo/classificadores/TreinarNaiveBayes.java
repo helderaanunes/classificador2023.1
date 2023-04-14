@@ -54,7 +54,7 @@ TelaInicial telaInicial;
         Evaluation evaluation = new Evaluation(trainingInstances);
         evaluation.evaluateModel(naivebayes, testInstances);
         System.out.println("Naive bayes ("+(System.currentTimeMillis()-tempo)+") \n\n"+evaluation.toSummaryString("\nResults", false));
-        Resultado r = new Resultado("Naive Bayes", evaluation.correct());
+        Resultado r = new Resultado("Naive Bayes", evaluation.correct(),naivebayes);
         telaInicial.adicionarResultado(r);
     }
 }

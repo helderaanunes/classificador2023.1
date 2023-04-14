@@ -54,7 +54,7 @@ TelaInicial telaInicial;
         Evaluation evaluation = new Evaluation(trainingInstances);
         evaluation.evaluateModel(algoritmo, testInstances);
         System.out.println("Resultado MLP ("+(System.currentTimeMillis()-tempo)+") \n\n"+evaluation.toSummaryString("\nResults", false));
-        Resultado r = new Resultado("MLP", evaluation.correct());
+        Resultado r = new Resultado("MLP", evaluation.correct(),algoritmo);
         telaInicial.adicionarResultado(r);
     }
 }

@@ -5,8 +5,10 @@
 package br.com.cafi.classificacao.visao;
 
 import br.com.cafi.classificacao.modelo.classificadores.TreinarIBK;
+import br.com.cafi.classificacao.modelo.classificadores.TreinarJ48;
 import br.com.cafi.classificacao.modelo.classificadores.TreinarMLP;
 import br.com.cafi.classificacao.modelo.classificadores.TreinarNaiveBayes;
+import br.com.cafi.classificacao.modelo.classificadores.TreinarRandomForest;
 import br.com.cafi.classificacao.modelo.classificadores.TreinarSMO;
 import java.util.Enumeration;
 import java.util.logging.Level;
@@ -221,7 +223,8 @@ public class SelecionarAtributosPanel extends javax.swing.JPanel {
         new TreinarMLP(instancias, telaInicial).start();
         new TreinarNaiveBayes(instancias, telaInicial).start();
         new TreinarSMO(instancias, telaInicial).start();
-
+        new TreinarJ48(instancias, telaInicial).start();
+        new TreinarRandomForest(instancias, telaInicial).start();
     }//GEN-LAST:event_treinarButtonActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed

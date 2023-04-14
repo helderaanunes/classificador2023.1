@@ -179,7 +179,7 @@ public class TelaInicial extends javax.swing.JFrame {
 
     public synchronized void adicionarResultado(Resultado r ){
         lista.add(r);
-        if(lista.size()>3){
+        if(lista.size()>5){
             Resultado melhorResultado=lista.get(0);
             for (int i=1;i<lista.size();i++){
                 if (lista.get(i).getCorreto()>melhorResultado.getCorreto())
@@ -187,8 +187,12 @@ public class TelaInicial extends javax.swing.JFrame {
                 
             }
             System.out.println("Melhor resultado foi: "+melhorResultado);
+            // Fazer aqui a atividade de sala de aula
+            
+            
         }
     }
+    
     
     ArrayList<Resultado> lista = new ArrayList<>();
     // Variables declaration - do not modify//GEN-BEGIN:variables

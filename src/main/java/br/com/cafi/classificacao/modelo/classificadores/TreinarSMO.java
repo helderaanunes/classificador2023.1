@@ -55,7 +55,7 @@ TelaInicial telaInicial;
         Evaluation evaluation = new Evaluation(trainingInstances);
         evaluation.evaluateModel(algoritmo, testInstances);
         System.out.println("Resultado do SMO  ("+(System.currentTimeMillis()-tempo)+")  \n\n"+evaluation.toSummaryString("\nResults", false));
-        Resultado r = new Resultado("SMO", evaluation.correct());
+        Resultado r = new Resultado("SMO", evaluation.correct(),algoritmo);
         telaInicial.adicionarResultado(r);
     }
 }

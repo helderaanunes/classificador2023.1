@@ -6,14 +6,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import weka.classifiers.Evaluation;
 import weka.classifiers.lazy.IBk;
+import weka.classifiers.trees.J48;
 import weka.core.Instances;
 
-public class TreinarIBK extends  Thread{
+public class TreinarJ48 extends  Thread{
     TelaInicial telaInicial;
-    IBk algoritmo;
+    J48 algoritmo;
     Instances data;
     
-    public TreinarIBK (Instances data,TelaInicial ti){
+    public TreinarJ48 (Instances data,TelaInicial ti){
         this.data=data;
         this.telaInicial=ti;
     }
@@ -22,14 +23,14 @@ public class TreinarIBK extends  Thread{
         try {
             realizarTreinamento(data);
         } catch (Exception ex) {
-            Logger.getLogger(TreinarIBK.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TreinarJ48.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public void realizarTreinamento(Instances datasetInstances) throws Exception {
         // Create naivebayes classifier //
         long tempo = System.currentTimeMillis();
-        algoritmo = new IBk();
+        algoritmo = new J48();
 
         // Randomize the dataset //
         datasetInstances.randomize(new java.util.Random(0));
@@ -50,11 +51,13 @@ public class TreinarIBK extends  Thread{
         // Build Classifier //
         algoritmo.buildClassifier(trainingInstances);
 
+
+        
         // Evaluation //
         Evaluation evaluation = new Evaluation(trainingInstances);
         evaluation.evaluateModel(algoritmo, testInstances);
-        System.out.println("IBK ("+(System.currentTimeMillis()-tempo)+") \n\n"+evaluation.toSummaryString("\nResults", false));
-        Resultado r = new Resultado("IBK", evaluation.correct(),algoritmo);
+        System.out.println("J48 ("+(System.currentTimeMillis()-tempo)+") \n\n"+evaluation.toSummaryString("\nResults", false));
+        Resultado r = new Resultado("J48", evaluation.correct(),algoritmo);
         telaInicial.adicionarResultado(r);
     }
 }
