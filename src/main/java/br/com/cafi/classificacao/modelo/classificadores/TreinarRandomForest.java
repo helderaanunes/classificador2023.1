@@ -57,7 +57,7 @@ public class TreinarRandomForest extends  Thread{
         Evaluation evaluation = new Evaluation(trainingInstances);
         evaluation.evaluateModel(algoritmo, testInstances);
         System.out.println("RandomForest ("+(System.currentTimeMillis()-tempo)+") \n\n"+evaluation.toSummaryString("\nResults", false));
-        Resultado r = new Resultado("RandomForest", evaluation.correct(),algoritmo);
+        Resultado r = new Resultado("RandomForest", evaluation.correct(),algoritmo,trainingInstances);
         telaInicial.adicionarResultado(r);
     }
 }

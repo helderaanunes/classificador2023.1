@@ -2,18 +2,21 @@ package br.com.cafi.classificacao.modelo.entidade;
 
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.functions.MultilayerPerceptron;
+import weka.core.Instances;
 
 public class Resultado {
     private String algoritmo;
     private double correto;
     private AbstractClassifier classificador;
-    
-    
-    public Resultado(String algoritmo, double correto, AbstractClassifier classificador) {
+    private Instances instances;
+
+    public Resultado(String algoritmo, double correto, AbstractClassifier classificador, Instances instances) {
         this.algoritmo = algoritmo;
         this.correto = correto;
-        this.classificador=classificador;
+        this.classificador = classificador;
+        this.instances = instances;
     }
+    
 
     public String getAlgoritmo() {
         return algoritmo;
@@ -37,6 +40,14 @@ public class Resultado {
 
     public void setClassificador(AbstractClassifier classificador) {
         this.classificador = classificador;
+    }
+
+    public Instances getInstances() {
+        return instances;
+    }
+
+    public void setInstances(Instances instances) {
+        this.instances = instances;
     }
     
     public String toString (){

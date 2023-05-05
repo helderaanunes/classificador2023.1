@@ -57,7 +57,7 @@ public class TreinarJ48 extends  Thread{
         Evaluation evaluation = new Evaluation(trainingInstances);
         evaluation.evaluateModel(algoritmo, testInstances);
         System.out.println("J48 ("+(System.currentTimeMillis()-tempo)+") \n\n"+evaluation.toSummaryString("\nResults", false));
-        Resultado r = new Resultado("J48", evaluation.correct(),algoritmo);
+        Resultado r = new Resultado("J48", evaluation.correct(),algoritmo,trainingInstances);
         telaInicial.adicionarResultado(r);
     }
 }

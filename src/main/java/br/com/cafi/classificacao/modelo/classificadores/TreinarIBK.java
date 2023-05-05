@@ -54,7 +54,7 @@ public class TreinarIBK extends  Thread{
         Evaluation evaluation = new Evaluation(trainingInstances);
         evaluation.evaluateModel(algoritmo, testInstances);
         System.out.println("IBK ("+(System.currentTimeMillis()-tempo)+") \n\n"+evaluation.toSummaryString("\nResults", false));
-        Resultado r = new Resultado("IBK", evaluation.correct(),algoritmo);
+        Resultado r = new Resultado("IBK", evaluation.correct(),algoritmo,trainingInstances);
         telaInicial.adicionarResultado(r);
     }
 }

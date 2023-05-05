@@ -4,15 +4,18 @@
  */
 package br.com.cafi.classificacao.visao;
 
+import br.com.cafi.classificacao.modelo.entidade.Relatorio;
 import br.com.cafi.classificacao.modelo.entidade.Resultado;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.filechooser.FileSystemView;
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.CSVLoader;
 
@@ -115,15 +118,15 @@ public class TelaInicial extends javax.swing.JFrame {
                 Instances data = loader.getDataSet();
                 System.out.println("carregou arquivo");
                 System.out.println(data.get(0).toString());
-                
+
                 JInternalFrame jif = new JInternalFrame("Selecionar Atributos");
                 jDesktopPane1.add(jif);
                 jif.setVisible(true);
                 jif.setBounds(0, 0, 500, 500);
                 jif.setClosable(true);
                 jif.setResizable(true);
-                
-                SelecionarAtributosPanel sap = new SelecionarAtributosPanel(jif,data,this);
+
+                SelecionarAtributosPanel sap = new SelecionarAtributosPanel(jif, data, this);
                 jif.add(sap);
             } catch (IOException ex) {
                 Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
@@ -139,7 +142,7 @@ public class TelaInicial extends javax.swing.JFrame {
         jif.setBounds(0, 0, 400, 400);
         jif.setClosable(true);
         jif.setResizable(true);
-      //  jif.add(new SelecionarAtributosPanel(jif, instancias, this));
+        //  jif.add(new SelecionarAtributosPanel(jif, instancias, this));
     }//GEN-LAST:event_selecionarAtributosMenuItemActionPerformed
 
     /**
@@ -177,24 +180,73 @@ public class TelaInicial extends javax.swing.JFrame {
         });
     }
 
-    public synchronized void adicionarResultado(Resultado r ){
+    public synchronized void adicionarResultado(Resultado r) {
         lista.add(r);
-        if(lista.size()>5){
-            Resultado melhorResultado=lista.get(0);
-            for (int i=1;i<lista.size();i++){
-                if (lista.get(i).getCorreto()>melhorResultado.getCorreto())
-                    melhorResultado=lista.get(i);
-                
+        if (lista.size() > 5) {
+            Resultado melhorResultado = lista.get(0);
+            for (int i = 1; i < lista.size(); i++) {
+                if (lista.get(i).getCorreto() > melhorResultado.getCorreto()) {
+                    melhorResultado = lista.get(i);
+                }
+
             }
-            System.out.println("Melhor resultado foi: "+melhorResultado);
+            System.out.println("Melhor resultado foi: " + melhorResultado);
             // Fazer aqui a atividade de sala de aula
-            
-            
+            JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+            int returnValue = jfc.showOpenDialog(null);
+            // int returnValue = jfc.showSaveDialog(null);
+
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = jfc.getSelectedFile();
+
+                CSVLoader loader = new CSVLoader();
+                try {
+                    loader.setSource(selectedFile);
+                    Instances data = loader.getDataSet();
+                    data.setClassIndex(data.numAttributes() - 1);
+
+                    
+                    ArrayList<String> classes = new ArrayList<>();
+                    Enumeration<Object> classesEnumation = melhorResultado.getInstances().classAttribute().enumerateValues();
+                    do {
+                      classes.add(""+classesEnumation.nextElement());
+                    } while (classesEnumation.hasMoreElements());
+
+                    for (int i = 0; i < data.size(); i++) {
+                        double probabilidade[]
+                                = melhorResultado.getClassificador().distributionForInstance(data.get(i));
+
+                        System.out.println("A instancia num " + i + " possui a probabi da classe 0 "
+                                + (probabilidade[0] * 100) + "% e da classe 1 de " + (probabilidade[1] * 100) + "%");
+                        ArrayList<String> listaDeClasses = new ArrayList();
+                        
+                        
+                        Relatorio relatorio = new Relatorio(
+                                //modificar para quando for mais de duas classe
+                                probabilidade[0]>probabilidade[1]?classes.get(0):classes.get(1)
+                                ,
+                                //modificar para quando for mais de duas classes
+                                probabilidade[0]>probabilidade[1]?probabilidade[0]:probabilidade[1]
+                                ,
+                                //Teremos que selecionar qual é o atributo identificador 
+                                //ou gerar uma string gigante com todos os atributos dele
+                                i+"");
+                        listaRelatorio.add(relatorio);
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+
         }
     }
-    
-    
+
     ArrayList<Resultado> lista = new ArrayList<>();
+    ArrayList<Relatorio> listaRelatorio = new ArrayList<>();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem abrirArquivoAprendizagemMenuItem;
     private javax.swing.JMenu arquivoMenu;
